@@ -18,6 +18,7 @@ module Stoplight::Providers
       else
         # Jenkins doesn't return an array when there's only one job...
         @projects ||= [ @response.parsed_response['Projects']['Project'] ].flatten.collect do |project|
+          # TODO Allow sub-folders
           job_folder_name = project['webUrl'].scan(/\/job\/(.*)\/job\//).flatten.first
           Stoplight::Project.new({
            :name => "#{job_folder_name}/#{project['name']}",
