@@ -2,12 +2,17 @@ configure {
   set :root, File.dirname(__FILE__)
 }
 
+enable :sessions
+
 #
 # GET /
 #
 # Load the static HTML file
 #
 get '/' do
+  session[:projects]         = params[:projects]
+  session[:ignored_projects] = params[:ignored_projects]
+
   send_file File.join(settings.public_folder, 'index.html')
 end
 
@@ -60,6 +65,17 @@ def load_projects
     Thread.new do
       server_projects = Timeout::timeout(5) do
         get_server(server).projects
+      end
+
+      # Merge custom filter settings
+      if session[:projects]
+        server['projects'] ||= []
+        server['projects'] = server['projects'] + session[:projects].split(',')
+      end
+
+      if session[:ignored_projects]
+        server['ignored_projects'] ||= []
+        server['ignored_projects'] = server['ignored_projects'] + session[:ignored_projects].split(',')
       end
 
       # if server['projects'] is defined, we only want those projects
