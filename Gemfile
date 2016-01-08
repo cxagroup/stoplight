@@ -12,13 +12,14 @@ gem 'rabl',               '~> 0.8.5'
 gem 'xml-simple',         '~> 1.1.2'
 
 group :development do
-  gem 'guard',                    '~> 1.0.3'
-  gem 'guard-compass',            '~> 0.0.6'
-  gem 'guard-coffeescript',       '~> 0.6.0'
-  gem 'guard-rspec',              '~> 0.7.3'
-  gem 'guard-spork',              '~> 0.8.0'
+  gem 'guard'
+  gem 'guard-compass'
+  gem 'guard-coffeescript'
+  gem 'guard-rspec'
+  gem 'guard-spork'
   gem 'shotgun',                  '~> 0.9'
-  gem 'therubyracer',             '~> 0.11.4'
+  gem 'libv8',                    '3.16.14.7'
+  gem 'therubyracer'
 end
 
 group :test do
