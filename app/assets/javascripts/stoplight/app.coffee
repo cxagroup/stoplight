@@ -7,7 +7,7 @@ $(document).ready( ->
     App.projects.fetch()
 
   refresh_data()
-  
+
   new Views.ProjectsBoard({collection: App.projects, el: $('#projects-board')})
   new Views.ProjectsList({collection: App.projects, el: $('#projects-list')})
 

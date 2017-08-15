@@ -17,7 +17,7 @@ class Models.Project extends Backbone.Model
 
   toJSON: ->
     hash = _.clone(@attributes)
-    
+
     hash.ignored_klass =
       ((@get('ignored') and "ignored") or "watching")
 
