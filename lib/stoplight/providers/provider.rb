@@ -21,6 +21,14 @@ module Stoplight::Providers
 
     # Initializes a hash `@options` of default options
     def initialize(options = {})
+      # Override settings with environment variables
+      if ENV['STOPLIGHT_SERVER_URL'].nil? && ENV['STOPLIGHT_SERVER_URL'] == ""
+        $logger.debug "Using 'url' from config file"
+      else
+        $logger.debug "Using ENV var for 'url'"
+        options['url'] = ENV['STOPLIGHT_SERVER_URL']
+      end
+
       if options['url'].nil?
         raise ArgumentError, "'url' must be supplied as an option to the Provider. Please add 'url' => '...' to your hash."
       end
@@ -56,10 +64,12 @@ module Stoplight::Providers
 
       url_options = {}
 
-      if @options['username'] || @options['password']
+      # Override settings with environment variables
+      if ENV['STOPLIGHT_USERNAME'] != "" || ENV['STOPLIGHT_PASSWORD'] != ""
+        puts "Using basic auth"
         url_options[:basic_auth] = {
-          :username => @options['username'],
-          :password => @options['password']
+          :username => ENV['STOPLIGHT_USERNAME'],
+          :password => ENV['STOPLIGHT_PASSWORD']
         }
       end
 
