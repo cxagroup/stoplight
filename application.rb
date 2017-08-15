@@ -1,5 +1,8 @@
 configure {
   set :root, File.dirname(__FILE__)
+  set :show_exceptions, false
+  set :environment, :production
+  set :logging, false
 }
 
 enable :sessions
