@@ -6,7 +6,7 @@ Stoplight is a build monitoring tool that is largely based off [greenscreen](htt
 - built-in support for [Jenkins](http://www.jenkis-ci.org)
 - built-in support for [Travis-CI](http://travis-ci.org)
 - custom provider support
-- resuable DSL
+- reusable DSL
 
 Stoplight is designed to be displayed on large television screens or monitors. It automatically resizes to fill the maximum real estate the screen can offer.
 
@@ -14,7 +14,45 @@ And: It's (still) one of the most beautiful build monitors out there IMO.
 
 # Installation
 
-## Docker
+## Configure the target server
+
+1) Create a config file `config/servers.yml` with your desired server types e.g. thoughtworks_go, jenkins
+
+Example:
+
+    -
+      type: 'thoughtworks_go'
+      url: http://127.0.0.1:8153
+      projects:
+        - /.*::.*::.*/ #To show only jobs and not stages
+
+You can override these values with environment variables. This makes it easier to run it in a container context e.g. Kubernetes, OpenShift etc:
+
+    STOPLIGHT_USERNAME
+    STOPLIGHT_PASSWORD
+    STOPLIGHT_SERVER_URL
+
+Please note that user credentials _must_ be provided with the ENV variables.
+The `username` and `password` options in the file will _not_ work.
+
+The URL can be overridden with the `STOPLIGHT_SERVER_URL` ENV variable
+or can be set in the config file.
+
+For cloud usage we recommend using the ENV variable. See [12factorApp](https://12factor.net/config) for context.
+
+All servers must specify a `type` option within the `config/servers.yml` file.
+This tells Stoplight what provider it should use (see below).
+
+2) Run the service
+
+2.1) Docker Compose (recommended)
+
+- Make sure you've adjusted the `environment` parameters in the `docker-compose.yml`
+- Run this command to start the service:
+
+    docker-compose up
+
+2.2) Docker
 
 - Run this command to build the Docker image:
 
@@ -28,7 +66,7 @@ If your CI server requires username and password for authentication run docker l
 
     docker run --env STOPLIGHT_USERNAME="<name>" --env STOPLIGHT_PASSWORD="<password>" -it -p 5000:5000 -v $PWD/config/servers.yml:/usr/src/app/config/servers.yml --name stoplight stoplight
 
-## Ruby native
+2.3) Ruby native
 
 Stoplight is a Rack application, so you'll need to install Ruby and Rubygems before you can run Stoplight. **Stoplight requires Ruby 1.9.x**.
 
@@ -40,28 +78,7 @@ And then bundle all the application's dependencies:
 
     bundle install
 
-## Configuration
-
-The app can be configured in two parts:
-
-1) a config file `config/servers.yml`
-
-2) environment variables:
-
-    STOPLIGHT_USERNAME
-    STOPLIGHT_PASSWORD
-    STOPLIGHT_SERVER_URL
-
-Please note that user credentials must be provided with the ENV variables.
-The `username` and `password` options in the file will _not_ work.
-
-The URL can be overridden with the `STOPLIGHT_SERVER_URL` ENV variable
-or can be set in the config file.
-
-For cloud usage we recommend using the ENV variable. See [12factorApp](https://12factor.net/config) for context.
-
-All servers must specify a `type` option within the `config/servers.yml` file.
-This tells Stoplight what provider it should use (see below).
+3) Open this address in your browser: http://localhost:5000/. Type `t` to toggle the project list.
 
 # Demo
 
@@ -88,7 +105,7 @@ If you are using the Jenkins [`folders` plugin](https://www.cloudbees.com/produc
 
 # FAQ
 
-## How can I filter project?
+## How can I filter projects?
 
 If you have a lot of projects, you may want to selective display them on Stoplight. Luckily, this is just a simple configuration option. To ignore certain projects, just add the `ignored_projects` field to the config. It even supports regular expressions:
 
