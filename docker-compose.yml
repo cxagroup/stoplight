@@ -1,0 +1,12 @@
+version: '3'
+services:
+  stoplight:
+    build: .
+    ports:
+      - 5000:5000
+    environment:
+      - STOPLIGHT_SERVER_URL=
+      - STOPLIGHT_USERNAME=
+      - STOPLIGHT_PASSWORD=
+    volumes:
+      - $PWD/config/servers.yml:/usr/src/app/config/servers.yml
