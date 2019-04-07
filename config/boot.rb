@@ -18,5 +18,5 @@ require 'application'
 
 require 'logger'
 class ::Logger; alias_method :write, :<<; end
-$logger = ::Logger.new('log/application.log')
+$logger = ::Logger.new(STDOUT)
 use Rack::CommonLogger, $logger
