@@ -1,0 +1,4 @@
+-
+  type: 'thoughtworks_go'
+  projects:
+   - /.*::.*::.*/ #To show only jobs and not stages
